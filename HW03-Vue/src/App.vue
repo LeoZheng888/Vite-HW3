@@ -178,7 +178,7 @@ const remark =ref('')
           <button class="btn btn-primary" @click="checkItem(orderItem)" >送出</button>
         </div>
       </div>
-    </div>
+    </div> 
     <hr />
     <div class="row justify-content-center" v-if="turn" >
       <div class="col-8">
