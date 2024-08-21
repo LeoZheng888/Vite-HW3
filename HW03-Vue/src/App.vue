@@ -66,6 +66,8 @@ orderItem.value.push({
   price:item.price,
   quantity: 1
 })
+total.value=true
+textareaValue.value = '';
 }
 
 const deleteItem =()=>{
@@ -91,23 +93,32 @@ const checkSum = computed(() => {
 });
 
 
-const checkItem =(item)=>{
- 
+/* const checkItem =(item)=>{
+  orderCheckItem.value=[];
 if (orderItem.value.length === 0) {
-    turn.value = false;  // 修改为 turn.value
+    turn.value = false; 
   } else {
     orderItem.value.forEach(item => {
     orderCheckItem.value.push(item);
   });
-    turn.value = true;  // 修改为 turn.value
+    turn.value = true;  
   }
   orderItem.value = [];
-  
-
-}
+  total.value=false
+} */
+const checkItem = () => {
+  orderCheckItem.value = [...orderItem.value]; // 将订单项复制到检查订单中
+  remark.value = textareaValue.value; // 将备注保存
+  orderItem.value = []; // 清空当前订单项
+  total.value = false; // 重置总计显示
+  turn.value = true; // 显示订单检查部分
+};
 let  turn = ref(false)
-let  turnOrder = false
+let total=ref(false)
 
+const textareaValue =ref('')
+
+const remark =ref('')
 </script>
 
 <template>
@@ -154,15 +165,16 @@ let  turnOrder = false
         
           </tbody>
         </table>
-        <div class="text-end mb-3">
+        <div class="text-end mb-3" v-if="total">
           <h5>總計: <span>{{sum}}</span></h5>
         </div>
-        <textarea
+        <textarea v-if="total"
+        v-model="textareaValue"
           class="form-control mb-3"
           rows="3"
           placeholder="備註"
         ></textarea>
-        <div class="text-end">
+        <div class="text-end" v-if="total">
           <button class="btn btn-primary" @click="checkItem(orderItem)" >送出</button>
         </div>
       </div>
@@ -170,6 +182,7 @@ let  turnOrder = false
     <hr />
     <div class="row justify-content-center" v-if="turn" >
       <div class="col-8">
+   
         <div class="card">
           <div class="card-body">
             <div class="card-title">
@@ -191,7 +204,7 @@ let  turnOrder = false
                
                 </tbody>
               </table>
-              <div class="text-end">備註: <span>都不要香菜</span></div>
+              <div class="text-end">備註: <span>{{remark}}</span></div>
               <div class="text-end">
                 <h5>總計: <span>{{ checkSum }}</span></h5>
               </div>
